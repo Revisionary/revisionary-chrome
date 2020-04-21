@@ -172,7 +172,7 @@ require('http').createServer(async (req, res) => {
 		const width = parseInt(queryData.width, 10) || 1024;
 		const height = parseInt(queryData.height, 10) || 768;
 
-		const project_ID = parseInt(queryData.page_ID) || 0;
+		const project_ID = parseInt(queryData.project_ID) || 0;
 		const page_ID = parseInt(queryData.page_ID) || 0;
 		const phase_ID = parseInt(queryData.phase_ID) || 0;
 		const device_ID = parseInt(queryData.device_ID) || 0;
