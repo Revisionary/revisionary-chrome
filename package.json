@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/bilaltas/revisionary#readme",
   "dependencies": {
+    "archiver": "^4.0.1",
     "cdn-detector": "^0.1.6",
     "jimp": "^0.9.3",
     "lru-cache": "^5.1.1",

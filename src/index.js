@@ -1,5 +1,5 @@
 const fs = require('fs');
-const http = require('http');
+var archiver = require('archiver');
 const { URL } = require('url');
 const urlParser = require('url');
 const {
@@ -177,7 +177,7 @@ require('http').createServer(async (req, res) => {
 		const phase_ID = parseInt(queryData.phase_ID) || 0;
 		const device_ID = parseInt(queryData.device_ID) || 0;
 
-		const browser_ID = project_ID + '-' + page_ID + '-' + phase_ID + '-' + device_ID || url;
+		const browser_ID = project_ID + '-' + page_ID + '-' + phase_ID + '-' + device_ID + '-' + Math.random().toString(36).substring(7);
 
 		const fullPage = queryData.fullPage == 'true' || false;
 		const page_type = queryData.page_type || 'url';
@@ -724,7 +724,7 @@ require('http').createServer(async (req, res) => {
 
 				// Create the site folder if not exist
 				if (!fs.existsSync(siteDir)) {
-					fs.mkdirSync(siteDir);
+					fs.mkdirSync(siteDir, { recursive: true });
 					try{ fs.chownSync(siteDir, 33, 33); } catch(e) {}
 				}
 
@@ -775,7 +775,7 @@ require('http').createServer(async (req, res) => {
 
 						// Create the folder if not exist
 						if (!fs.existsSync(downloadable.newDir)) {
-							fs.mkdirSync(downloadable.newDir);
+							fs.mkdirSync(downloadable.newDir, { recursive: true });
 							try{ fs.chownSync(downloadable.newDir, 33, 33); } catch(e) {}
 						}
 
@@ -840,8 +840,58 @@ require('http').createServer(async (req, res) => {
 				});
 
 
+
+
+
+				// const zipfilepath = "cache/phase-" + phase_ID + ".zip";
+				// if ( fs.existsSync(zipfilepath) ) fs.unlinkSync(zipfilepath);
+				// let zipfile = fs.createWriteStream(zipfilepath);
+				// var archive = archiver('zip', {
+				// 	zlib: { level: 9 } // Sets the compression level.
+				// });
+
+
+				// // listen for all archive data to be written
+				// // 'close' event is fired only when a file descriptor is involved
+				// zipfile.on('close', function() {
+				// 	console.log(archive.pointer() + ' total bytes');
+				// 	console.log('archiver has been finalized and the output file descriptor has closed.');
+				// });
+				
+				// // This event is fired when the data source is drained no matter what was the data source.
+				// // It is not part of this library but rather from the NodeJS Stream API.
+				// // @see: https://nodejs.org/api/stream.html#stream_event_end
+				// zipfile.on('end', function() {
+				// 	console.log('Data has been drained');
+				// });
+ 
+				// // good practice to catch warnings (ie stat failures and other non-blocking errors)
+				// archive.on('warning', function(err) {
+				//   if (err.code === 'ENOENT') {
+				// 	// log warning
+				//   } else {
+				// 	// throw error
+				// 	throw err;
+				//   }
+				// });
+				 
+				// // good practice to catch this error explicitly
+				// archive.on('error', function(err) {
+				//   throw err;
+				// });
+ 
+				// // pipe archive data to the file
+				// archive.pipe(zipfile);
+				// archive.directory(siteDir, false);
+				// archive.finalize();
+
+
+
+
+
 				const dataString = JSON.stringify({
 					status: (downloadedFiles.length ? 'success' : 'error'),
+					//zipPath: zipfilepath,
 					realPageURL : realPageURL,
 					renderDifference : renderDifference,
 					downloadedFiles: downloadedFiles
@@ -881,7 +931,7 @@ require('http').createServer(async (req, res) => {
 					// Page Screenshot Saving
 					const deviceScreenshotDir = siteDir + "screenshots/";
 					const deviceScreenshot = deviceScreenshotDir + 'device-' + device_ID + '.jpg';
-					if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir);
+					if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir, { recursive: true });
 					fs.writeFileSync(deviceScreenshot, screenshot);
 					console.log('📸 Device Screenshot Saved: ', deviceScreenshot);
 
@@ -908,7 +958,7 @@ require('http').createServer(async (req, res) => {
 
 
 				// Create folders
-				if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir);
+				if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir, { recursive: true });
 
 
 				// SCREENSHOTS
@@ -1137,13 +1187,13 @@ require('http').createServer(async (req, res) => {
 
 					if (browser[browser_ID]) {
 
-						console.log('🔌 Closing the browser for ' + url, ' VERSION ID: ' + phase_ID, ' PAGE ID: ' + page_ID, ' DEVICE ID: ' + device_ID);
+						console.log('🔌 Closing the browser for ' + url, ' PROJECT ID: ' + project_ID, ' PAGE ID: ' + page_ID, ' PHASE ID: ' + phase_ID, ' DEVICE ID: ' + device_ID, 'BROWSER ID: ' + browser_ID);
 
 						browser[browser_ID].close();
 						browser[browser_ID] = null;
 						delete browser[browser_ID];
 
-						console.log('🔌✅ Browser closed for ' + url, ' VERSION ID: ' + phase_ID, ' PAGE ID: ' + page_ID, ' DEVICE ID: ' + device_ID);
+						console.log('🔌✅ Browser closed for ' + url, ' PROJECT ID: ' + project_ID, ' PAGE ID: ' + page_ID, ' PHASE ID: ' + phase_ID, ' DEVICE ID: ' + device_ID, 'BROWSER ID: ' + browser_ID);
 
 					}
 
