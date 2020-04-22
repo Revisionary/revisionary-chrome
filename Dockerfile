@@ -26,16 +26,8 @@ RUN apt-get update \
 
 
 # Install puppeteer so it's available in the container.
-#RUN mkdir /chrome
 ADD . /chrome
-# COPY package.json /chrome
-# # COPY package-lock.json /chrome
-# COPY index.js /chrome
-# COPY index.html /chrome
-# COPY blocked.json /chrome
-# COPY ./assets /chrome
 WORKDIR /chrome
-# RUN npm install
 
 
 
