@@ -51,3 +51,5 @@ RUN npm install \
 USER pptruser
 
 CMD ["google-chrome-unstable"]
+
+ENTRYPOINT ["npm", "start"]
