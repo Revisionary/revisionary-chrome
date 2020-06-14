@@ -31,7 +31,7 @@ WORKDIR /chrome
 
 
 
-RUN npm install \
+RUN npm ci \
     # Add user so we don't need --no-sandbox.
     # same layer as npm install to keep re-chowned files from using up several hundred MBs more space
     && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \

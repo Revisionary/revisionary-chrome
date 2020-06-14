@@ -34,24 +34,24 @@ const pTimeout = require('p-timeout');
 */
 
 const autoScroll = async (page) => {
-  await page.evaluate(async () => {
-    await new Promise((resolve, reject) => {
-      let totalHeight = 0
-      let distance = 100
-      let timer = setInterval(() => {
+	await page.evaluate(async () => {
+		await new Promise((resolve, reject) => {
+			let totalHeight = 0
+			let distance = 100
+			let timer = setInterval(() => {
 
-		let scrollHeight = document.body.scrollHeight;
-        window.scrollBy(0, distance);
-		totalHeight += distance;
-		
-        if (totalHeight >= scrollHeight){
-		  clearInterval(timer);
-          resolve();
-		}
-		
-      }, 300);
-    });
-  });
+				let scrollHeight = document.body.scrollHeight;
+				window.scrollBy(0, distance);
+				totalHeight += distance;
+
+				if (totalHeight >= scrollHeight) {
+					clearInterval(timer);
+					resolve();
+				}
+
+			}, 300);
+		});
+	});
 };
 
 
@@ -140,7 +140,7 @@ require('http').createServer(async (req, res) => {
 
 
 		const parsedRemoteUrl = new URL(url);
-		const { origin,	hostname, pathname, searchParams } = new URL(url);
+		const { origin, hostname, pathname, searchParams } = new URL(url);
 		const path = decodeURIComponent(pathname);
 		const output = queryData.output;
 
@@ -184,20 +184,21 @@ require('http').createServer(async (req, res) => {
 		const SSR = page_type == 'ssr';
 		const capture = page_type == 'capture';
 
-		const siteDir = 'cache/projects/project-'+project_ID+'/page-'+page_ID+'/phase-'+phase_ID+'/';
+		const siteDir = 'cache/projects/project-' + project_ID + '/page-' + page_ID + '/phase-' + phase_ID + '/';
+		const screenshotDir = 'cache/screenshots/';
 		const logDir = siteDir + 'logs/';
 
 
 		// Create the log folder if not exist
 		if (!fs.existsSync(logDir)) {
 			fs.mkdirSync(logDir, { recursive: true });
-			try{ fs.chownSync(logDir, 33, 33); } catch(e) {}
+			try { fs.chownSync(logDir, 33, 33); } catch (e) { }
 		}
 
 
 		// Create the log file
-		fs.writeFileSync(logDir+'browser.log', 'Started');
-		try{ fs.chownSync(logDir+'browser.log', 33, 33); } catch(e) {}
+		fs.writeFileSync(logDir + 'browser.log', 'Started');
+		try { fs.chownSync(logDir + 'browser.log', 33, 33); } catch (e) { }
 
 
 
@@ -289,9 +290,9 @@ require('http').createServer(async (req, res) => {
 
 				if (!fileName.includes('.')) {
 
-				    if (resourceType == 'document') fileName += '.html';
-				    else if (resourceType == 'stylesheet') fileName += '.css';
-				    else if (resourceType == 'script') fileName += '.js';
+					if (resourceType == 'document') fileName += '.html';
+					else if (resourceType == 'stylesheet') fileName += '.css';
+					else if (resourceType == 'script') fileName += '.js';
 
 				}
 
@@ -365,9 +366,9 @@ require('http').createServer(async (req, res) => {
 
 
 				// Response info
-			    const response = await request.response();
-			    const response_status = response.status();
-			    const response_url = response.url();
+				const response = await request.response();
+				const response_status = response.status();
+				const response_url = response.url();
 
 
 
@@ -375,7 +376,7 @@ require('http').createServer(async (req, res) => {
 
 
 
-			    // Request info
+				// Request info
 				const parsedRealURL = new URL(realPageURL);
 				const ourHost = parsedRealURL.hostname;
 
@@ -396,9 +397,9 @@ require('http').createServer(async (req, res) => {
 
 				if (!fileName.includes('.')) {
 
-				    if (resourceType == 'document') fileName += '.html';
-				    else if (resourceType == 'stylesheet') fileName += '.css';
-				    else if (resourceType == 'script') fileName += '.js';
+					if (resourceType == 'document') fileName += '.html';
+					else if (resourceType == 'stylesheet') fileName += '.css';
+					else if (resourceType == 'script') fileName += '.js';
 
 				}
 
@@ -420,7 +421,7 @@ require('http').createServer(async (req, res) => {
 
 
 				// If on the same host, or provided by a CDN
-				if ( ourHost == requestHost || ourHost == requestHost.replace('www.', '') || fromCDN ) {
+				if (ourHost == requestHost || ourHost == requestHost.replace('www.', '') || fromCDN) {
 
 
 					let shouldDownload = true;
@@ -483,7 +484,8 @@ require('http').createServer(async (req, res) => {
 
 
 						// Get the buffer
-						response.buffer().then(buffer => { bufferCount++;
+						response.buffer().then(buffer => {
+							bufferCount++;
 
 							if (response_url == realPageURL) console.log('🏠 HOME BUFFER READY:', response_url);
 
@@ -530,7 +532,7 @@ require('http').createServer(async (req, res) => {
 					}
 
 
-				// If not on our host !!!
+					// If not on our host !!!
 				} else {
 
 					console.log(`📄❌ OTHER HOST FILE: ${fileType} ${shortURL}`);
@@ -639,9 +641,9 @@ require('http').createServer(async (req, res) => {
 					waitUntil: 'networkidle2',
 					timeout: 10000
 				}).then(() => {
-			    	console.log('Page successfully loaded.');
+					console.log('Page successfully loaded.');
 				}).catch((res) => {
-				    console.log('Page loading failed.', res);
+					console.log('Page loading failed.', res);
 				})
 			]);
 
@@ -682,7 +684,7 @@ require('http').createServer(async (req, res) => {
 
 			// Wait
 			let waitMs = 2000;
-			console.log('⏳ Waiting for '+ (waitMs/1000) +' seconds...');
+			console.log('⏳ Waiting for ' + (waitMs / 1000) + ' seconds...');
 			await page.waitFor(waitMs);
 			console.log('▶️ Continuing the process.');
 
@@ -696,7 +698,7 @@ require('http').createServer(async (req, res) => {
 				window.scrollTo(0, 0);
 			});
 
-			console.log('⏳ Waiting for '+ (waitMs/1000) +' seconds...');
+			console.log('⏳ Waiting for ' + (waitMs / 1000) + ' seconds...');
 			await page.waitFor(waitMs);
 			console.log('Page interactions done');
 
@@ -725,12 +727,12 @@ require('http').createServer(async (req, res) => {
 				// Create the site folder if not exist
 				if (!fs.existsSync(siteDir)) {
 					fs.mkdirSync(siteDir, { recursive: true });
-					try{ fs.chownSync(siteDir, 33, 33); } catch(e) {}
+					try { fs.chownSync(siteDir, 33, 33); } catch (e) { }
 				}
 
 
 				// Find all the HTMLs
-				var downloadableDocuments = downloadableRequests.filter(function(req){
+				var downloadableDocuments = downloadableRequests.filter(function (req) {
 
 					if (req.fileType == "document") return true;
 					return false;
@@ -747,10 +749,10 @@ require('http').createServer(async (req, res) => {
 
 
 					// Filter the non-buffered
-					downloadableRequests = downloadableRequests.filter(function(req){
+					downloadableRequests = downloadableRequests.filter(function (req) {
 
 						if (req.fileType == "document" && req.buffer == null) return false;
-					    return true;
+						return true;
 
 					});
 
@@ -768,7 +770,7 @@ require('http').createServer(async (req, res) => {
 
 
 				// DOWNLOAD
-				downloadableRequests.forEach(function(downloadable, i) {
+				downloadableRequests.forEach(function (downloadable, i) {
 
 
 					try {
@@ -776,7 +778,7 @@ require('http').createServer(async (req, res) => {
 						// Create the folder if not exist
 						if (!fs.existsSync(downloadable.newDir)) {
 							fs.mkdirSync(downloadable.newDir, { recursive: true });
-							try{ fs.chownSync(downloadable.newDir, 33, 33); } catch(e) {}
+							try { fs.chownSync(downloadable.newDir, 33, 33); } catch (e) { }
 						}
 
 						let buffer = downloadable.buffer;
@@ -799,7 +801,7 @@ require('http').createServer(async (req, res) => {
 
 								// Save the unrendered version first? !!!
 								fs.writeFileSync(siteDir + 'original.html', buffer);
-								try{ fs.chownSync(siteDir + 'original.html', 33, 33); } catch(e) {}
+								try { fs.chownSync(siteDir + 'original.html', 33, 33); } catch (e) { }
 
 								buffer = renderedHTML;
 
@@ -811,7 +813,7 @@ require('http').createServer(async (req, res) => {
 
 						// Write to the file
 						fs.writeFileSync(downloadable.newDir + downloadable.newFileName, buffer);
-						try{ fs.chownSync(downloadable.newDir + downloadable.newFileName, 33, 33); } catch(e) {}
+						try { fs.chownSync(downloadable.newDir + downloadable.newFileName, 33, 33); } catch (e) { }
 
 
 						// Add to the list
@@ -857,14 +859,14 @@ require('http').createServer(async (req, res) => {
 				// 	console.log(archive.pointer() + ' total bytes');
 				// 	console.log('archiver has been finalized and the output file descriptor has closed.');
 				// });
-				
+
 				// // This event is fired when the data source is drained no matter what was the data source.
 				// // It is not part of this library but rather from the NodeJS Stream API.
 				// // @see: https://nodejs.org/api/stream.html#stream_event_end
 				// zipfile.on('end', function() {
 				// 	console.log('Data has been drained');
 				// });
- 
+
 				// // good practice to catch warnings (ie stat failures and other non-blocking errors)
 				// archive.on('warning', function(err) {
 				//   if (err.code === 'ENOENT') {
@@ -874,12 +876,12 @@ require('http').createServer(async (req, res) => {
 				// 	throw err;
 				//   }
 				// });
-				 
+
 				// // good practice to catch this error explicitly
 				// archive.on('error', function(err) {
 				//   throw err;
 				// });
- 
+
 				// // pipe archive data to the file
 				// archive.pipe(zipfile);
 				// archive.directory(siteDir, false);
@@ -892,14 +894,14 @@ require('http').createServer(async (req, res) => {
 				const dataString = JSON.stringify({
 					status: (downloadedFiles.length ? 'success' : 'error'),
 					//zipPath: zipfilepath,
-					realPageURL : realPageURL,
-					renderDifference : renderDifference,
+					realPageURL: realPageURL,
+					renderDifference: renderDifference,
 					downloadedFiles: downloadedFiles
 				}, null, '\t');
 
 
 				// Write to the log fileb
-				fs.writeFileSync(logDir+'browser.log', dataString);
+				fs.writeFileSync(logDir + 'browser.log', dataString);
 
 
 				// JSON OUTPUT
@@ -914,24 +916,23 @@ require('http').createServer(async (req, res) => {
 
 					// Wait
 					let waitMs = 2000;
-					console.log('⏳ Waiting for '+ (waitMs/1000) +' seconds to take the screenshot...');
+					console.log('⏳ Waiting for ' + (waitMs / 1000) + ' seconds to take the screenshot...');
 					await page.waitFor(waitMs);
 
 					console.log('SCREENSHOTTING...');
 					const screenshot = await pTimeout(page.screenshot({
 						type: 'jpeg',
 						clip: {
-							x : 0,
-							y : 0,
-							width : width,
+							x: 0,
+							y: 0,
+							width: width,
 							height: height
 						}
 					}), 20 * 1000, 'Screenshot timed out');
 
 					// Page Screenshot Saving
-					const deviceScreenshotDir = siteDir + "screenshots/";
-					const deviceScreenshot = deviceScreenshotDir + 'device-' + device_ID + '.jpg';
-					if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir, { recursive: true });
+					const deviceScreenshot = screenshotDir + 'device-' + device_ID + '.jpg';
+					if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir, { recursive: true });
 					fs.writeFileSync(deviceScreenshot, screenshot);
 					console.log('📸 Device Screenshot Saved: ', deviceScreenshot);
 
@@ -953,12 +954,11 @@ require('http').createServer(async (req, res) => {
 
 
 				// Device Screenshot Saving
-				const deviceScreenshotDir = siteDir + "screenshots/";
-				let deviceScreenshot = deviceScreenshotDir + 'device-' + device_ID + '.jpg';
+				let deviceScreenshot = screenshotDir + 'device-' + device_ID + '.jpg';
 
 
 				// Create folders
-				if (!fs.existsSync(deviceScreenshotDir)) fs.mkdirSync(deviceScreenshotDir, { recursive: true });
+				if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir, { recursive: true });
 
 
 				// SCREENSHOTS
@@ -975,9 +975,9 @@ require('http').createServer(async (req, res) => {
 						const screenshot = await pTimeout(page.screenshot({
 							type: 'jpeg',
 							clip: {
-								x : 0,
-								y : 0,
-								width : bodySizes.width,
+								x: 0,
+								y: 0,
+								width: bodySizes.width,
 								height: bodySizes.height
 							}
 						}), 20 * 1000, 'Screenshot timed out');
@@ -990,7 +990,7 @@ require('http').createServer(async (req, res) => {
 
 						// Wait
 						let waitMs = 2000;
-						console.log('⏳ Waiting for '+ (waitMs/1000) +' seconds to take the device screenshot...');
+						console.log('⏳ Waiting for ' + (waitMs / 1000) + ' seconds to take the device screenshot...');
 						await page.waitFor(waitMs);
 
 
@@ -998,9 +998,9 @@ require('http').createServer(async (req, res) => {
 						const screenshot = await pTimeout(page.screenshot({
 							type: 'jpeg',
 							clip: {
-								x : 0,
-								y : 0,
-								width : width,
+								x: 0,
+								y: 0,
+								width: width,
 								height: height
 							}
 						}), 20 * 1000, 'Screenshot timed out');
@@ -1024,7 +1024,7 @@ require('http').createServer(async (req, res) => {
 
 				const dataString = JSON.stringify({
 					status: (screenshotSaved ? 'success' : 'error'),
-					screenshot : deviceScreenshot,
+					screenshot: deviceScreenshot,
 					page_type: page_type
 				}, null, '\t');
 
@@ -1062,7 +1062,7 @@ require('http').createServer(async (req, res) => {
 					const imports = doc.querySelectorAll('link[rel=import]');
 					imports.forEach(i => i.parentNode.removeChild(i));
 
-					const { origin,	pathname } = location;
+					const { origin, pathname } = location;
 					// Inject <base> for loading relative resources
 					if (!doc.querySelector('base')) {
 						const base = document.createElement('base');
@@ -1126,9 +1126,9 @@ require('http').createServer(async (req, res) => {
 						screenshot = await pTimeout(handle.screenshot({
 							type: 'jpeg',
 							clip: {
-								x : 0,
-								y : 0,
-								width : width,
+								x: 0,
+								y: 0,
+								width: width,
 								height: height
 							}
 						}), 20 * 1000, 'Screenshot timed out');
@@ -1259,15 +1259,15 @@ require('http').createServer(async (req, res) => {
 			try {
 
 				for (var p_ID in browser) {
-				    if (browser.hasOwnProperty(p_ID)) {
+					if (browser.hasOwnProperty(p_ID)) {
 
-				        console.log(p_ID + " Browser Closing...");
+						console.log(p_ID + " Browser Closing...");
 
-				        browser[p_ID].close();
+						browser[p_ID].close();
 						browser[p_ID] = null;
 						delete browser[p_ID];
 
-				    }
+					}
 				}
 
 			} catch (err) {
@@ -1283,15 +1283,15 @@ process.on('SIGINT', () => {
 	if (browser) {
 
 		for (var p_ID in browser) {
-		    if (browser.hasOwnProperty(p_ID)) {
+			if (browser.hasOwnProperty(p_ID)) {
 
-		        console.log(p_ID + " Browser Closing...");
+				console.log(p_ID + " Browser Closing...");
 
-		        browser[p_ID].close();
+				browser[p_ID].close();
 				browser[p_ID] = null;
 				delete browser[p_ID];
 
-		    }
+			}
 		}
 
 	}
