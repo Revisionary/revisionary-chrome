@@ -932,7 +932,14 @@ require('http').createServer(async (req, res) => {
 
 					// Page Screenshot Saving
 					const deviceScreenshot = screenshotDir + 'device-' + device_ID + '.jpg';
-					if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir, { recursive: true });
+
+					// Create the folder if not exist
+					if (!fs.existsSync(screenshotDir)) {
+						fs.mkdirSync(screenshotDir, { recursive: true });
+						try { fs.chownSync(screenshotDir, 33, 33); } catch (e) { }
+					}
+
+					// Create the file
 					fs.writeFileSync(deviceScreenshot, screenshot);
 					console.log('📸 Device Screenshot Saved: ', deviceScreenshot);
 
@@ -957,8 +964,11 @@ require('http').createServer(async (req, res) => {
 				let deviceScreenshot = screenshotDir + 'device-' + device_ID + '.jpg';
 
 
-				// Create folders
-				if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir, { recursive: true });
+				// Create the folder if not exist
+				if (!fs.existsSync(screenshotDir)) {
+					fs.mkdirSync(screenshotDir, { recursive: true });
+					try { fs.chownSync(screenshotDir, 33, 33); } catch (e) { }
+				}
 
 
 				// SCREENSHOTS
