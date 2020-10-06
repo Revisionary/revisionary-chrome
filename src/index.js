@@ -639,7 +639,7 @@ require('http').createServer(async (req, res) => {
 				responsePromise,
 				page.goto(pageURL, {
 					waitUntil: 'networkidle2',
-					timeout: 10000
+					timeout: 35000
 				}).then(() => {
 					console.log('Page successfully loaded.');
 				}).catch((res) => {
