@@ -7,8 +7,6 @@ services:
         image: revisionary_chrome:latest
         container_name: revisionary_chrome
         restart: "always"
-        ports:
-            - 8080:3000
         volumes:
             - ./cache:/chrome/cache
             # - ./src:/chrome/src
