@@ -3,7 +3,7 @@ version: "3.8"
 services:
     chrome:
         build: .
-        #user: www-data
+        user: www-data
         image: revisionary_chrome:latest
         container_name: revisionary_chrome
         restart: "always"
