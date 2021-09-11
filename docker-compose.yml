@@ -8,10 +8,13 @@ services:
         container_name: revisionary_chrome
         restart: "always"
         volumes:
-            - ./cache:/chrome/cache
+            - cache:/chrome/cache
             # - ./src:/chrome/src
         networks:
             - backend-network
 
 networks:
     backend-network: {}
+
+volumes:
+    cache: {}
