@@ -10,3 +10,8 @@ services:
         volumes:
             - ./cache:/chrome/cache
             # - ./src:/chrome/src
+        networks:
+            - backend-network
+
+networks:
+    backend-network: {}
